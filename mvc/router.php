@@ -11,10 +11,23 @@ if(isset($_GET["controller"])){
         case "CONTATOS":
             switch($modo){
                 case "INSERIR":
+                    require_once("controller/controllerContato.php");
+                    
+                    //Instancia da controller de contato
+                    $controllerContato = new controllerContato();
+
+                    //Chamando o método de inserir um novo contato
+                    $controllerContato->inserirContato();
+
+                    break;
                 case "ATUALIZAR":
+
                 case "EXCLUIR":
+                
                 case "BUSCAR":
+
             }
+            break;
     }
 }
 ?>

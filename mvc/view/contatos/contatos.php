@@ -22,7 +22,7 @@
             </tr>
             <tr>
                 <td class="tblcadastro_td">Data Nascimento:</td>
-                <td><input value="" name="txtdatanasc" type="text" value="" /></td>
+                <td><input value="" name="txtdatanascimento" type="text" value="" /></td>
             </tr>
             <tr>
                 <td class="tblcadastro_td">Obs:</td>
