@@ -11,6 +11,7 @@ if(isset($_GET["controller"])){
         case "CONTATOS":
             switch($modo){
                 case "INSERIR":
+                    //Import da controller de contato
                     require_once("controller/controllerContato.php");
                     
                     //Instancia da controller de contato

@@ -54,11 +54,24 @@
             <td>&nbsp;</td>
             <td>&nbsp;</td>
         </tr>
+
+        <?php
+            //Import da controller de contato
+            require_once("controller/controllerContato.php");
+            $listContato = new controllerContato();
+
+            //Chamada para o metodo de listagem de contato
+            $rs = $listContato->listarContato();
+
+            $cont = 0;
+
+            while($cont < count($rs)){
+        ?>
         <tr class="tblconsulta_dados">
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td><?php echo($rs[$cont]->getNome()) ?></td>
+            <td><?php echo($rs[$cont]->getTelefone()) ?></td>
+            <td><?php echo($rs[$cont]->getCelular()) ?></td>
+            <td><?php echo($rs[$cont]->getEmail()) ?></td>
             <td>
                 <a href="cadastro.php?modo=buscar&id=">
                     <img src="icones/modify16.png">
@@ -68,5 +81,9 @@
                 </a>|
             </td>
         </tr>
+        <?php
+                $cont++;
+            }
+        ?>
     </table>
 </div> 

@@ -10,7 +10,13 @@
 */
 
 class controllerContato{
-    public function __construct(){ }
+    public function __construct(){
+        //Import da classe contato
+        require_once("model/contatoClass.php");
+
+        //Import da classe contatoDAO, para inserir no BD
+        require_once("model/DAO/contatoDAO.php");
+    }
 
     public function inserirContato(){
         //Verifica qual metodo esta sendo requisitado do formulatio(POST ou GET)
@@ -22,16 +28,23 @@ class controllerContato{
             $dataNascimento = $_POST["txtdatanascimento"];
             $obs = $_POST["txtobs"];
 
-            require_once("model/contatoClass.php");
-
+            //Instancia da classe
             $contatoClass = new Contato();
 
+            //Guardando os dados do post no objeto da classe
             $contatoClass->setNome($nome);
             $contatoClass->setTelefone($telefone);
             $contatoClass->setCelular($celular);
             $contatoClass->setEmail($email);
             $contatoClass->setDataNascimento($dataNascimento);
             $contatoClass->setObs($obs);
+            
+            //Instancia da classe contatoDAO, essa classe é responsável por manipular o CRUD no BD
+            $contatoDAO = new contatoDAO();
+
+            /* Chamada para o metodo de inserir no BD, passando como parâmetro o objeto
+            contatoClass que tem todos os dados que serão inseridos no banco de dados */
+            $contatoDAO -> insert($contatoClass);
         }
     }
 
@@ -44,7 +57,9 @@ class controllerContato{
     }
 
     public function listarContato(){
-
+        $listContatoDAO = new contatoDAO();
+        
+        return($listContatoDAO->selectAll());
     }
 
     public function buscarContato(){

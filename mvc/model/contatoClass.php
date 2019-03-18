@@ -66,7 +66,8 @@ class Contato{
     }
 
     public function setDataNascimento($dataNascimento){
-        $this->dataNascimento = $dataNascimento;
+        //strtotime converte string para data e date muda o formato da data
+        $this->dataNascimento = date("Y-m-d", strtotime($dataNascimento));
     }
 
     public function getObs(){
