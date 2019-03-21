@@ -1,0 +1,35 @@
+<script>
+	const PERMISSAO_ADMINISTRADOR 	= 0b1000,
+		PERMISSAO_CONTAS_PAGAR 		= 0b0100,
+		PERMISSAO_CONTAS_RECEBER 	= 0b0010,
+		PERMISSAO_FORNECEDOR 		= 0b0001;
+	
+	
+	function possuiPermissao(permissaoNivel, permissao){
+		return permissaoNivel%(permissao * 2) >= permissao;
+	}
+	
+	let nivel = 0b1011;
+	let soma = PERMISSAO_ADMINISTRADOR + PERMISSAO_CONTAS_RECEBER + PERMISSAO_FORNECEDOR;
+	
+	alert(nivel);
+	
+	alert(nivel == soma);
+	
+	if(possuiPermissao(nivel, PERMISSAO_ADMINISTRADOR)){
+		alert("Administrador");
+	}
+	
+	if(possuiPermissao(nivel, PERMISSAO_CONTAS_PAGAR)){
+		alert("Contas a pagar");
+	}
+	
+	if(possuiPermissao(nivel, PERMISSAO_CONTAS_RECEBER)){
+		alert("Contas a receber");
+	}
+	
+	if(possuiPermissao(nivel, PERMISSAO_FORNECEDOR)){
+		alert("Fornecedor");
+	}
+	
+</script>
