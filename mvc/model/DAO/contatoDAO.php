@@ -8,10 +8,17 @@
     Autor da Modificação:
     Objetivo da classe: CRUD da classe de Contatos
 */
+
 class contatoDAO{
+
+    private $conex;
+
     public function __construct(){
         //Import da classe do banco para todos os métodos
         require_once("conexaoMySQL.php");
+
+        //Instancia da classe conexão
+        $this->conex = new conexaoMySQL();
     }
 
     //Inserir um registro no banco de dados.
@@ -25,11 +32,8 @@ class contatoDAO{
         '".$contato->getDataNascimento()."',
         '".$contato->getObs()."')";
 
-        //Instancia a classe de conexao
-        $conex = new conexaoMySQL();
-
         //Abrindo conexão com o BD
-        $PDO_conex = $conex->connectDataBase();
+        $PDO_conex = $this->conex->connectDataBase();
 
         //Executa no BD o script Insert e retorna verdadeiro/falso
         if($PDO_conex->query($sql)){
@@ -39,28 +43,59 @@ class contatoDAO{
         }
 
         //Fecha a conexão com o BD
-        $conex->closeDataBase();
+        $this->conex->closeDataBase();
     }
 
     //Deletar um registro no banco de dados.
-    public function delete(){
+    public function delete($id){
+        $sql = "DELETE FROM tblcontatos where codigo=".$id;
 
+        //Abrindo conexão com o BD
+        $PDO_conex = $this->conex->connectDataBase();
+
+        //Executa no BD o script Insert e retorna verdadeiro/falso
+        if($PDO_conex->query($sql)){
+            header("location:index.php");
+        }else{
+            echo("Erro de script de delete");
+        }
+
+        //Fecha a conexão com o BD
+        $this->conex->closeDataBase();
     }
 
     //Atualiza um registro no banco de dados.
-    public function update(){
+    public function update(Contato $contato){
+        $sql = "UPDATE tblcontatos
+        SET nome = '".$contato->getNome()."',
+            email = '".$contato->getEmail()."',
+            telefone = '".$contato->getTelefone()."',
+            celular = '".$contato->getCelular()."',
+            dataNascimento = '".$contato->getDataNascimento()."',
+            obs = '".$contato->getObs()."'
+        WHERE codigo = '".$contato->getCodigo()."';";
 
+        //Abrindo conexão com o BD
+        $PDO_conex = $this->conex->connectDataBase();
+
+        //Executa no BD o script Insert e retorna verdadeiro/falso
+        if($PDO_conex->query($sql)){
+            header("location:index.php");
+        }else{
+            echo("Erro de script");
+            echo($sql);
+        }
+
+        //Fecha a conexão com o BD
+        $this->conex->closeDataBase();
     }
 
     //Lista todos os registros do banco de dados.
     public function selectAll(){
         $sql = "SELECT * FROM tblcontatos ORDER BY codigo DESC";
 
-        //Instancia a classe de conexao
-        $conex = new conexaoMySQL();
-
         //Abrindo conexão com o BD
-        $PDO_conex = $conex->connectDataBase();
+        $PDO_conex = $this->conex->connectDataBase();
 
         //executa o script de select no bd
         $select = $PDO_conex->query($sql);
@@ -74,6 +109,7 @@ class contatoDAO{
         EX: PDO::FETCH_ASSOC, PDO::FETCH_ARRAY etc. */
         while($rscontatos=$select->fetch(PDO::FETCH_ASSOC)){
             $listContatos[] = new Contato();
+            $listContatos[$cont]->setCodigo($rscontatos["codigo"]);
             $listContatos[$cont]->setNome($rscontatos["nome"]);
             $listContatos[$cont]->setEmail($rscontatos["email"]);
             $listContatos[$cont]->setTelefone($rscontatos["telefone"]);
@@ -86,15 +122,40 @@ class contatoDAO{
             $cont = $valorCont + UM;
         }
 
-        $conex->closeDataBase();
+        $this->conex->closeDataBase();
 
         return($listContatos);
 
     }
 
     //Seleciona um registro pelo ID.
-    public function selectById(){
+    public function selectById($id){
+        $sql = "SELECT * FROM tblcontatos WHERE codigo=".$id;
 
+        //Abrindo conexão com o BD
+        $PDO_conex = $this->conex->connectDataBase();
+
+        //executa o script de select no bd
+        $select = $PDO_conex->query($sql);
+
+        /* $select->fetch no formado pdo retorna os dados do BD
+        também retorna com característica do PDO como o fetch
+        é necessário especificar o modelo de conversão.
+        EX: PDO::FETCH_ASSOC, PDO::FETCH_ARRAY etc. */
+        if($rscontatos=$select->fetch(PDO::FETCH_ASSOC)){
+            $listContatos = new Contato();
+            $listContatos->setCodigo($rscontatos["codigo"]);
+            $listContatos->setNome($rscontatos["nome"]);
+            $listContatos->setEmail($rscontatos["email"]);
+            $listContatos->setTelefone($rscontatos["telefone"]);
+            $listContatos->setCelular($rscontatos["celular"]);
+            $listContatos->setDataNascimento($rscontatos["dataNascimento"]);
+            $listContatos->setObs($rscontatos["obs"]);
+        }
+
+        $this->conex->closeDataBase();
+
+        return($listContatos);
     }
 }
 ?>
